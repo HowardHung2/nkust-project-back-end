@@ -1,3 +1,4 @@
-# 
+# ignore all node_modules directories and wrongly committed files( from https://xrpl.org/docs/tutorials/python/build-apps/get-started )
+
 XRPL/
 node_modules/
