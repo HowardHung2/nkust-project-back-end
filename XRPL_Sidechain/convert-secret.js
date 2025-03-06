@@ -7,5 +7,5 @@ async function getEthereumPrivateKey(secret) {
     console.log("Ethereum-Compatible Private Key:", wallet.privateKey);
 }
 
-const secretKey = "sEd7hDX5yKYU7aZxWjWsyasQMWMb49F"; // Replace with your actual secret
+const secretKey = "sEdTbVsXegYAWT75ajrMTyRqmdb1i8x"; // Replace with your actual secret
 getEthereumPrivateKey(secretKey);
