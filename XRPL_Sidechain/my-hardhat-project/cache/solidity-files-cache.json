@@ -2,7 +2,7 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/hongbingrong/VScode/Nkust_Project_2024/back-end/nkust-project-back-end/XRPL_Sidechain/my-hardhat-project/contracts/HelloWorld.sol": {
-      "lastModificationDate": 1741166998113,
+      "lastModificationDate": 1741342680662,
       "contentHash": "b06c7474b71ac6114b756c71d4c837da",
       "sourceName": "contracts/HelloWorld.sol",
       "solcConfig": {
@@ -35,6 +35,42 @@
       ],
       "artifacts": [
         "HelloWorld"
+      ]
+    },
+    "/Users/hongbingrong/VScode/Nkust_Project_2024/back-end/nkust-project-back-end/XRPL_Sidechain/my-hardhat-project/contracts/Lock.sol": {
+      "lastModificationDate": 1741343253310,
+      "contentHash": "dacf0d5cb5b45dc83086de5bc1c26c2c",
+      "sourceName": "contracts/Lock.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "Lock"
       ]
     }
   }

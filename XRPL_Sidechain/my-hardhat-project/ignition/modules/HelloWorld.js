@@ -1,10 +1,8 @@
-// 部署智能合約(點火模組)，指定要部署哪個合約、需要哪些參數，以及如何管理部署流程
+const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules"); // 導入 buildModule 函式
 
-const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules"); //這個函式用於定義 Ignition 部署模組
+module.exports = buildModule("HelloWorldModule", (m) => { // 這個函式呼叫建立了一個名為 "HelloWorldModule" 的部署模組。 第二個參數是一個回呼函式，函式中的 m 提供了用來取得部署參數和部署合約的工具。
+  const initialMessage = m.getParameter("initialMessage"); // 透過 m.getParameter 取得一個名為 "initialMessage" 的參數，這個參數會傳遞給合約的建構子。
+  const helloWorld = m.contract("HelloWorld", [initialMessage]); // 使用 m.contract 函式來部署名為 "HelloWorld" 的合約。第二個引數是一個陣列，裡面包含建構子所需的參數（在此例中，只有 initialMessage）。
 
-module.exports = buildModule("HelloWorldModule", (m) => { //"HelloWorldModule"是該模組的名稱 (m) => { ... }是一個包含部署邏輯的回呼函數。
-  const initialMessage = m.getParameter("initialMessage"); //這裡我們使用 m.getParameter("initialMessage") 來獲取部署參數
-  const helloWorld = m.contract("HelloWorld", [initialMessage]); //這行程式碼部署 HelloWorld 合約，並將 initialMessage 作為建構函式的引數。
-
-  return { helloWorld }; // 回傳 helloWorld 物件，讓其他程式可以使用這個合約實例。
+  return { helloWorld }; // 回傳一個物件，其中包含剛剛部署好的 helloWorld 合約實例
 });
