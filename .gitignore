@@ -5,3 +5,5 @@ node_modules/
 
 # including Howard's personal Private Key
 .env
+
+venv/
