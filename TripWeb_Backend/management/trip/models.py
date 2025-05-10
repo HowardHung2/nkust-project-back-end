@@ -5,6 +5,7 @@ from django.db import models
 import uuid
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 # 行程表
@@ -81,6 +82,13 @@ class TripSchedule(models.Model):
         help_text="日期時段的狀態，例：開放預訂、已關閉預訂、已滿額",
     )  # 日期時段狀態
 
+    sold_users = models.ManyToManyField(
+        User,
+        through='order.TripOrder',
+        related_name='purchased_tripschedules',
+        blank=True,
+    )
+
     class Meta:
         indexes = [
             models.Index(fields=["trip"]),
@@ -121,3 +129,4 @@ class TripToken(models.Model):
 
     def get_status_display(self):
         return dict(self.STATUS_CHOICES).get(self.status)
+

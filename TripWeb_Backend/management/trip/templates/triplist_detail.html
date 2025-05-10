@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Title: {{ trip.title }}</h1>
+
+  <p><strong>Trip Code: </strong> <a href="">{{ trip.trip_code }}</a></p>
+  <!-- author detail link not yet defined -->
+  <p><strong>Location Country: </strong> {{ trip.location_country }}</p>
+  <p><strong>Location City: </strong> {{ trip.location_city }}</p>
+  <p><strong>Price(ntd): </strong> {{ trip.price_ntd }}</p>
+  <p><strong>Min Group: </strong> {{ trip.min_group_size }}</p>
+  <p><strong>Features: </strong> {{ trip.features }}</p>
+  <p><strong>Promotions: </strong> {{ trip.promotions }}</p>
+  <p><strong>Flight Reference: </strong> {{ trip.flight_reference }}</p>
+
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Schedule</h4>
+
+    {% for copy in trip.bookinstance_set.all %}
+      <hr />
+      <p
+        <!-- class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}"> -->
+        {{ copy.date }}
+        {{ copy.available_spots }}
+      </p>
+      {% if copy.status != 'CLOSED' %}
+        <p><strong>Date: </strong> {{ copy.date }}</p>
+      {% endif %}
+      <p class="text-muted"><strong>Id: </strong> {{ copy.id }}</p>
+    {% endfor %}
+  </div>
+{% endblock %}
