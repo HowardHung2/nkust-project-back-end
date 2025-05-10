@@ -1,7 +1,3 @@
-from django.db import models
-
-# Create your models here.
-
 import uuid
 from django.db import models
 from django.urls import reverse
@@ -41,6 +37,9 @@ class Trip(models.Model):
     flight_reference = models.TextField(
         help_text="參考航班資料，包含去程和回程的航班資訊，格式為JSON"
     )  # 參考航班（JSON格式，包含去程與回程資訊）
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    is_active  = models.BooleanField(default=True)
+    thumbnail  = models.ImageField(null=True, blank=True)
 
     def get_absolute_url(self):
         # 生成行程的詳細頁面 URL
@@ -60,6 +59,7 @@ class TripSchedule(models.Model):
         help_text="此日期時段所屬的行程",
     )  # 行程ID（外鍵）
     date = models.DateField(help_text="行程的具體出發日期")  # 日期
+    end_date = models.DateField(help_text="行程的結束日期")  # 日期
     token_index = models.IntegerField(
         help_text="此日期時段所發行的代幣數量"
     )  # 發行的代幣數量

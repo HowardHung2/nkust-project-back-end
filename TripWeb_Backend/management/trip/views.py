@@ -1,10 +1,39 @@
 from typing import Any
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-# Create your views here.
-
 from .models import Trip, TripSchedule, TripToken
+from .serializers import TripsSerializer, TripsScheduleSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status, generics
+
+@api_view(['GET'])
+def get_trips(request):
+    trip = Trip.objects.all()
+    data = TripsSerializer(trip, many=True).data
+    return Response(data)
+
+class get_trips_api_schedule(generics.ListAPIView):
+    queryset = TripSchedule.objects.filter(trip__is_active=True)
+    serializer_class = TripsScheduleSerializer
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        tour_dict = {
+            item['trip_code']: {
+                k: v for k, v in item.items() if k != 'trip_code'
+            } for item in response.data
+        }
+        return Response(tour_dict)
+
+
+
+
+
+
+
+
+
+
 def index(request):
 
     num_trip = Trip.objects.all().count()

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "management.order",
     "management.trip",
     "management.member",
-    "management.tokens"
+    "management.tokens",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
