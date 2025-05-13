@@ -1,33 +1,74 @@
 {% extends "base_generic.html" %}
 
+{% block head_styles %}
+  <!-- Styles for trip detail page -->
+  <style>
+    .product-card { background-color: #ffeaf0; border-radius: 15px; padding: 1.5rem; }
+    .price-tag { font-size: 1.5rem; color: #333; font-weight: bold; }
+    .badge-section { font-size: 1.2rem; color: #444; margin-bottom: 0.5rem; }
+    .main-btn { background-color: #00c080; color: #fff; border-radius: 10px; padding: 0.5rem 1.5rem; }
+    .section-title { font-weight: bold; font-size: 1.3rem; margin-top: 1.5rem; }
+    .icon-btn { font-size: 1.2rem; color: #ff69b4; cursor: pointer; margin-left: 0.5rem; }
+    .nav-tabs .nav-link { color: #555; }
+    .nav-tabs .nav-link.active { color: #00c080; font-weight: 600; }
+  </style>
+{% endblock %}
+
 {% block content %}
-  <h1>Title: {{ trip.title }}</h1>
-
-  <p><strong>Trip Code: </strong> <a href="">{{ trip.trip_code }}</a></p>
-  <!-- author detail link not yet defined -->
-  <p><strong>Location Country: </strong> {{ trip.location_country }}</p>
-  <p><strong>Location City: </strong> {{ trip.location_city }}</p>
-  <p><strong>Price(ntd): </strong> {{ trip.price_ntd }}</p>
-  <p><strong>Min Group: </strong> {{ trip.min_group_size }}</p>
-  <p><strong>Features: </strong> {{ trip.features }}</p>
-  <p><strong>Promotions: </strong> {{ trip.promotions }}</p>
-  <p><strong>Flight Reference: </strong> {{ trip.flight_reference }}</p>
-
-
-  <div style="margin-left:20px;margin-top:20px">
-    <h4>Schedule</h4>
-
-    {% for copy in trip.bookinstance_set.all %}
-      <hr />
-      <p
-        <!-- class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}"> -->
-        {{ copy.date }}
-        {{ copy.available_spots }}
-      </p>
-      {% if copy.status != 'CLOSED' %}
-        <p><strong>Date: </strong> {{ copy.date }}</p>
-      {% endif %}
-      <p class="text-muted"><strong>Id: </strong> {{ copy.id }}</p>
-    {% endfor %}
+<div class="container py-4">
+  <div class="product-card mb-4">
+    <div class="row">
+      <div class="col-md-8">
+        <h3 class="fw-bold" id="title">{{ trip.title }}</h3>
+        <p><i class="fa-solid fa-calendar-days"></i> Date: {{ schedule.date }} ~ {{ schedule.end_date }}</p>
+        <p><i class="fa-solid fa-earth-asia"></i> Country: {{ trip.location_country }}</p>
+        <p><i class="fa-solid fa-location-dot"></i> Location: {{ trip.location_city }}</p>
+        <p class="price-tag">From TWD ${{ schedule.price_ntd|floatformat:0 }}</p>
+        <p class="badge-section">{{ trip.promotions }}</p>
+        <p><i class="fa-solid fa-fire text-danger"></i> Order now to earn {{ schedule.token_index }} bonus tokens!</p>
+        <p>Minimum group size: {{ trip.min_group_size }} | Available spots: {{ schedule.available_spots }}</p>
+        <div class="mt-3 d-flex gap-2">
+          <button class="btn btn-outline-secondary">Add to Cart</button>
+          <button class="btn main-btn">Book Now</button>
+        </div>
+      </div>
+      <div class="col-md-4 text-center">
+        <img src="{{ trip.thumbnail.url }}" class="img-fluid rounded mb-2" style="max-width:100%; height:auto;" />
+        {% if trip.gallery_images %}
+        <div class="d-flex justify-content-center gap-2 mt-2">
+          {% for img in trip.gallery_images %}
+          <img src="{{ img.url }}" class="img-thumbnail" style="width:90px; height:60px;" />
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div class="mt-2 text-end">
+          <i class="far fa-heart icon-btn"></i>
+          <i class="fas fa-share-nodes icon-btn"></i>
+          <i class="fas fa-sunglasses icon-btn"></i>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div class="section-title">Product Details</div>
+  <ul class="nav nav-tabs mt-3" id="detailTab" role="tablist">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#features">Features</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#discounts">Discounts</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#flights">Flights</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#itineraries">Itinerary</button></li>
+  </ul>
+  <div class="tab-content border p-3 bg-white" id="detailTabContent">
+    <div class="tab-pane fade show active" id="features">{{ trip.features }}</div>
+    <div class="tab-pane fade" id="discounts">{{ trip.promotions }}</div>
+    <div class="tab-pane fade" id="flights">{{ trip.flight_reference }}</div>
+    <div class="tab-pane fade" id="itineraries">Itinerary details coming soon...</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.querySelectorAll('.fa-heart').forEach(icon => icon.addEventListener('click', () => icon.classList.toggle('fas')));
+  document.querySelectorAll('.fa-share-nodes').forEach(icon => icon.addEventListener('click', () => navigator.clipboard.writeText(window.location.href)));
+</script>
 {% endblock %}

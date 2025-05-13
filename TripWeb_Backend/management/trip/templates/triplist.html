@@ -1,17 +1,28 @@
 {% extends "base_generic.html" %}
 
+{% block head_styles %}
+  <!-- Styles for trip list page -->
+  <style>
+    h1 { font-size: 2rem; font-weight: bold; margin-bottom: 1rem; }
+    ul.trip-list { list-style: none; padding: 0; }
+    ul.trip-list li { padding: 0.75rem 0; border-bottom: 1px solid #eee; }
+    ul.trip-list li a { text-decoration: none; color: #333; font-weight: 500; }
+    ul.trip-list li a:hover { color: #5f27cd; }
+  </style>
+{% endblock %}
+
 {% block content %}
-  <h1>Trip List</h1>
+  <h1>Available Trips</h1>
   {% if TripList %}
-    <ul>
+    <ul class="trip-list">
       {% for trip in TripList %}
       <li>
         <a href="{{ trip.get_absolute_url }}">{{ trip.title }}</a>
-        ( {{trip.location_country}} )
+        <span class="text-muted">({{ trip.location_country }}, {{ trip.location_city }})</span>
       </li>
       {% endfor %}
     </ul>
   {% else %}
-    <p>There are no this trip .</p>
+    <p>No trips available.</p>
   {% endif %}
 {% endblock %}

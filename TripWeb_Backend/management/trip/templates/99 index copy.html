@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Local Trip Web Index</h1>
+  <p>
+    Welcome to Trip, a website developed by
+    <em>NKUST TEAM</em>!
+  </p>
+  <h2>Dynamic content</h2>
+  <p> The following record counts:</p>
+  <ul>
+    <li><strong>Trip:</strong> {{ num_trip }}</li>
+    <li><strong>Schedule:</strong> {{ num_tripSchedule }}</li>
+    <li><strong>Token:</strong> {{ num_tripToken }}</li>
+    <li><strong>Available Schedule:</strong> {{ num_tripSchedule_available }}</li>
+  </ul>
+{% endblock %}
+{% load static %}
+{% extends "base_generic.html" %}
+
+{% block head %}
+ 
