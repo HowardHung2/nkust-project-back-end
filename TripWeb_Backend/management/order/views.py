@@ -40,3 +40,19 @@ def purchase_trip(request, schedule_id):
         'form': form,
         'schedule': schedule,
     })
+
+# from rest_framework.decorators import api_view, permission_classes
+# from rest_framework.permissions import IsAuthenticated
+# from rest_framework.response import Response
+# from .models import TripSchedule
+# from order.models import TripOrder
+# from .serializers import TripScheduleSerializer
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def my_trips(request):
+#     user = request.user
+#     orders = TripOrder.objects.filter(user=user)
+#     schedules = [order.trip_schedule for order in orders]
+#     data = TripScheduleSerializer(schedules, many=True).data
+#     return Response(data)

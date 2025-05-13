@@ -41,8 +41,15 @@ INSTALLED_APPS = [
     "management.trip",
     "management.member",
     "management.tokens",
-    "rest_framework"
+    "rest_framework",
+    'corsheaders',
 ]
+
+REST_FRAMEWORK = {
+  'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny',],
+  'DEFAULT_PARSER_CLASSES':['rest_framework.parsers.JSONParser',],
+  
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

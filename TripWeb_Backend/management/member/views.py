@@ -36,3 +36,18 @@ def main_page(request):
 def log_out(request):
     auth.logout(request)
     return HttpResponseRedirect('/main_page')
+
+# from rest_framework.decorators import api_view, permission_classes
+# from rest_framework.permissions import IsAuthenticated
+# from rest_framework.response import Response
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def get_my_profile(request):
+#     user = request.user
+#     return Response({
+#         "username": user.username,
+#         "email": user.email,
+#         "is_staff": user.is_staff,
+#         "groups": [g.name for g in user.groups.all()],
+#     })

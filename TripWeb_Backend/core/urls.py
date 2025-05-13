@@ -19,6 +19,13 @@ urlpatterns = [
 
     # 預設跳轉首頁（你可改成導向 trip main）
     path('', RedirectView.as_view(url='/trip/')),
+
+    # # 1) 登录（获取 access + refresh）
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # # 2) 刷新 access
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # # 3) 登出（注销 refresh，选用）
+    # path('api/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
 ]
 
 # 加上 static files 設定（僅限 DEBUG 模式）
