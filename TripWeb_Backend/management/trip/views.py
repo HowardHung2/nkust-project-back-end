@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
-from .models import Trip, TripSchedule, TripToken
+from .models import Trip, TripSchedule
 
 def index(request):
     # 1) Basic statistics
@@ -65,7 +65,6 @@ class TripScheduleListView(generic.ListView):
     queryset = TripSchedule.objects.all()[:10]
     template_name = 'trip_schedule_list.html'
     paginate_by = 10
-
 
 class TripDetailView(generic.DetailView):
     model = Trip

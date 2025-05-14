@@ -11,6 +11,9 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("trips/", views.TripListView.as_view(), name="trip"),
     path("trips/<uuid:pk>/", views.TripDetailView.as_view(), name="trip_detail"),
+    path("schedule/", views.TripScheduleListView.as_view(), name="trip_schedule_list"),
+    path("schedule/<uuid:pk>/", views.TripSchedule, name="trip_schedule_detail"),
+
 
 
 

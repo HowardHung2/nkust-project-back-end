@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Trip, TripSchedule, TripToken
+from .models import Trip, TripSchedule
 # admin.site.register(Trip);
 # admin.site.register(TripSchedule);
 # admin.site.register(TripToken);
@@ -17,7 +17,4 @@ class TripScheduleAdmin(admin.ModelAdmin):
     list_display = ("trip", "date", "available_spots", "price_ntd")
     list_filter = ("date","status")
 
-@admin.register(TripToken)
-class TripTokenAdmin(admin.ModelAdmin):
-    list_display = ("trip_schedule", "token_amount", "status")
 
