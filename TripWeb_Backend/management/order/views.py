@@ -4,10 +4,10 @@ from .models import TripSchedule, TripOrder
 from .forms import PurchaseTripForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
+from django.contrib import messages
 
-
-class TripScheduleByUserListView(LoginRequiredMixin,generic.ListView):
-    """Generic class-based view listing books on loan to current user."""
+class TripScheduleByUserListView(LoginRequiredMixin, generic.ListView):
+    """列出當前使用者的所有訂單記錄"""
     model = TripOrder
     template_name = 'trip_schedule_list_by_user.html'
     context_object_name = 'user_trip_orders'
@@ -16,10 +16,9 @@ class TripScheduleByUserListView(LoginRequiredMixin,generic.ListView):
     def get_queryset(self):
         return (
             TripOrder.objects.filter(user=self.request.user)
-            .select_related('trip_schedule', 'trip_schedule__trip')  # 順便抓 trip 和 trip_schedule，減少 SQL 查詢
+            .select_related('trip_schedule', 'trip_schedule__trip')
             .order_by('-booking_date')
         )
-
 
 @permission_required('management.trip.can_purchase_trip')
 def purchase_trip(request, schedule_id):
@@ -32,7 +31,10 @@ def purchase_trip(request, schedule_id):
             order.user = request.user
             order.trip_schedule = schedule
             order.save()
-            return redirect('my_order')  # 假設你有一個訂單列表頁
+            messages.success(request, "✅ 您的預訂已成功送出！我們將盡快與您聯繫")
+            return redirect('my_order')  
+        else:
+            messages.error(request, "⚠ 請確認表單內容是否正確")
     else:
         form = PurchaseTripForm()
 
@@ -40,6 +42,7 @@ def purchase_trip(request, schedule_id):
         'form': form,
         'schedule': schedule,
     })
+
 
 # from rest_framework.decorators import api_view, permission_classes
 # from rest_framework.permissions import IsAuthenticated
