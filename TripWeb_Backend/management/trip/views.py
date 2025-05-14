@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import generic
 from .models import Trip, TripSchedule
 
+#TEST
+
 def index(request):
     # 1) Basic statistics
     num_trip = Trip.objects.count()
