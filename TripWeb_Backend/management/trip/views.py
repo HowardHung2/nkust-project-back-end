@@ -8,7 +8,7 @@ def index(request):
     # 1) Basic statistics
     num_trip = Trip.objects.count()
     num_tripSchedule = TripSchedule.objects.count()
-    num_tripToken = TripToken.objects.count()
+    # num_tripToken = TripToken.objects.count()
     num_tripSchedule_available = TripSchedule.objects.filter(status='OPEN').count()
 
     # 2) Get recommended trips (open for booking, active trips, sorted by date, limited to 3)
@@ -24,7 +24,7 @@ def index(request):
     context = {
         'num_trip': num_trip,
         'num_tripSchedule': num_tripSchedule,
-        'num_tripToken': num_tripToken,
+        # 'num_tripToken': num_tripToken,
         'num_tripSchedule_available': num_tripSchedule_available,
         'recommended_schedules': recommended_schedules,
     }
