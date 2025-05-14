@@ -1,17 +1,73 @@
 {% extends "base_generic.html" %}
+{% load static %}
+
+.btn-purple {
+  background-color: #5f27cd;
+  color: white;
+  border-radius: 1rem;
+}
+
 {% block content %}
+<div class="container py-5">
+  <div class="card shadow p-4" style="border-radius: 1.5rem; background-color: #fff0f8;">
+    <h2 class="text-center mb-4 fw-bold" style="color: #e60073;">📝 行程預訂確認</h2>
 
-  <h1>yyyy預訂行程：{{ schedule.trip.title }}</h1>
-  <p>出發日期：{{ schedule.date }}</p>
-  <p>價格（NTD）：{{ schedule.price_ntd }}</p>
-  <p>剩餘名額：{{ schedule.available_spots }}</p>
+    <div class="mb-3">
+      <h5 class="fw-bold">行程名稱：</h5>
+      <p>{{ schedule.trip.title }}</p>
+    </div>
 
-  <form action="" method="post">
+    <div class="mb-3">
+      <h5 class="fw-bold">出發日期：</h5>
+      <p>{{ schedule.date }}</p>
+    </div>
+
+    <div class="mb-3">
+      <h5 class="fw-bold">價格（TWD）：</h5>
+      <p class="text-danger fw-bold">NTD {{ schedule.price_ntd }}</p>
+    </div>
+
+    <div class="mb-4">
+      <h5 class="fw-bold">剩餘名額：</h5>
+      {% if schedule.available_spots <= 5 %}
+        <p class="text-danger fw-bold">⚠ 僅剩 {{ schedule.available_spots }} 位！</p>
+      {% else %}
+        <p>{{ schedule.available_spots }} 位</p>
+      {% endif %}
+    </div>
+
+
+    <form method="post">
       {% csrf_token %}
-      <table>
-        {{ form }}
-      </table>
-      <input type="submit" value="送出預訂" />
-  </form>
+      <div class="row g-3">
+        {% for field in form %}
+        <div class="col-12">
+          <label class="form-label fw-bold">{{ field.label_tag }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <div class="text-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
 
+     
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-purple px-4 py-2" style="font-weight: bold;">✅ 送出預訂</button>
+      </div>
+    </form>
+
+  
+    {% if messages %}
+    <div class="mt-4 alert alert-success text-center">
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}
