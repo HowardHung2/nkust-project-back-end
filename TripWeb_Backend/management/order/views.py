@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib import messages
 
+# test branch
+
 class TripScheduleByUserListView(LoginRequiredMixin, generic.ListView):
     """列出當前使用者的所有訂單記錄"""
     model = TripOrder
