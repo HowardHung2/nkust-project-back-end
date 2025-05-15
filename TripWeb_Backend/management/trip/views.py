@@ -73,7 +73,7 @@ class TripDetailView(generic.DetailView):
     context_object_name = 'trip'
     template_name = 'triplist_detail.html'
 
-class TripScheduleDetailView(generic.DeleteView):
+class TripScheduleDetailView(generic.DetailView):
     model = TripSchedule
     context_object_name = 'tripschedule'
     template_name = 'trip_schedule_detail.html'

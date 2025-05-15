@@ -1,0 +1,111 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block head_styles %}
+<style>
+  body {
+    background-color: #f3f0ff;
+    font-family: 'Poppins', sans-serif;
+  }
+  .schedule-section {
+    background-color: #ffffff;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  }
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #4b0082;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  ul.schedule-list {
+    list-style: none;
+    padding: 0;
+  }
+  ul.schedule-list li {
+    padding: 1rem;
+    border: 1px solid #dad4ed;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    background-color: #f9f7ff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  ul.schedule-list li:hover {
+    transform: translateY(-3px);
+    background-color: #ede7f6;
+  }
+  .schedule-thumbnail {
+    width: 80px;
+    height: 60px;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+  .schedule-info {
+    flex-grow: 1;
+  }
+  ul.schedule-list li a {
+    text-decoration: none;
+    color: #6f42c1;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  ul.schedule-list li a:hover {
+    color: #8e24aa;
+  }
+  .schedule-meta {
+    font-size: 0.95rem;
+    color: #666;
+  }
+  .badge-status {
+    font-size: 0.8rem;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+  }
+  .OPEN { background-color: #28a745; }
+  .CLOSED { background-color: #dc3545; }
+  .FULL { background-color: #ffc107; color: black; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="schedule-section">
+    <h1>📅 Upcoming Schedules</h1>
+    {% if TripScheduleList %}
+      <ul class="schedule-list">
+        {% for schedule in TripScheduleList %}
+        <li>
+          {% if schedule.trip.thumbnail %}
+            <img src="{{ schedule.trip.thumbnail.url }}" class="schedule-thumbnail" alt="{{ schedule.trip.title }}">
+          {% else %}
+            <img src="{% static 'images/default.jpg' %}" class="schedule-thumbnail" alt="Default Image">
+          {% endif %}
+          <div class="schedule-info">
+            <a href="{% url 'trip_schedule_detail' schedule.id %}">
+              {{ schedule.trip.title }} – {{ schedule.date }}
+            </a><br>
+            <span class="schedule-meta">
+              📆 {{ schedule.date }} ~ {{ schedule.end_date }}<br>
+              🌍 {{ schedule.trip.location_country }}, {{ schedule.trip.location_city }}<br>
+              💵 TWD ${{ schedule.price_ntd|floatformat:0 }} | ✨ Tokens: {{ schedule.token_index }}
+            </span>
+          </div>
+          <span class="badge-status {{ schedule.status }}">{{ schedule.get_status_display }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-center text-muted">🛑 No schedules available at the moment.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
