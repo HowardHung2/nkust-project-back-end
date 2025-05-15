@@ -1,5 +1,5 @@
 {% extends "base_generic.html" %}
-
+{% load static %}
 {% block head_styles %}
   <!-- Enhanced Styles for trip list page -->
   <style>
@@ -83,7 +83,12 @@
         <ul class="trip-list">
           {% for trip in TripList %}
           <li>
-            <img src="{{ trip.thumbnail.url }}" alt="thumbnail" class="trip-thumbnail">
+            {% if trip.thumbnail %}
+              <img src="{{ trip.thumbnail.url }}" class="card-img-top" alt="{{ trip.title }}">
+            {% else %}
+            <!-- below need to add a default.jpg -->
+              <img src="{% static 'images/default.jpg' %}" class="card-img-top" alt="Default image">
+            {% endif %}
             <div class="trip-info">
               <a href="{{ trip.get_absolute_url }}">{{ trip.title }}</a>
               <span class="badge">{{ trip.category|default:"Trip" }}</span><br>

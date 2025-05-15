@@ -44,15 +44,15 @@ class TripListView(generic.ListView):
         return Trip.objects.all()[:10]
 
     def get_context_data(self, **kwargs):
-        # first get the default context (which includes 'trip')
         context = super().get_context_data(**kwargs)
-        trip = self.object  # this is the Trip instance
 
-        # fetch all schedules for this trip (you can filter by status if you like)
-        schedules = trip.schedules.all().order_by('date')
+        # 建立 trip_id 對應 schedule 的 dict
+        trip_schedules = {
+            trip.id: trip.schedules.all().order_by('date')
+            for trip in context['TripList']
+        }
 
-        # add into the template context
-        context['schedules'] = schedules
+        context['trip_schedules'] = trip_schedules
         return context
 
     # def get_context_data(self, **kwargs):
