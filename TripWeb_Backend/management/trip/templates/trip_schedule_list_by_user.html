@@ -1,7 +1,7 @@
 <!-- templates/trip/tripschedule_list_by_user.html -->
 
 {% extends "base_generic.html" %}
-
+{% load static %}
 {% block head_styles %}
 <style>
   .order-section {
@@ -71,7 +71,11 @@
       <div class="order-section">
         {% for order in user_trip_orders %}
           <div class="order-item">
-            <img src="{{ order.trip_schedule.trip.thumbnail.url }}" class="order-img" alt="Trip Image">
+            {% if order.trip_schedule.trip.thumbnail %}
+              <img src="{{ order.trip_schedule.trip.thumbnail.url }}" class="order-img" alt="Trip Image">
+            {% else %}
+              <img src="{% static 'images/default.jpg' %}" class="order-img" alt="Default Image">
+            {% endif %}
             <div class="order-info">
               <div class="order-title">{{ order.trip_schedule.trip.title }}</div>
               <div class="order-meta">
