@@ -1,5 +1,5 @@
 {% extends "base_generic.html" %}
-
+{% load static %}
 {% block head_styles %}
   <!-- Styles for trip detail page -->
   <style>
@@ -33,7 +33,12 @@
         </div>
       </div>
       <div class="col-md-4 text-center">
-        <img src="{{ trip.thumbnail.url }}" class="img-fluid rounded mb-2" style="max-width:100%; height:auto;" />
+        {% if trip.thumbnail %}
+          <img src="{{ trip.thumbnail.url }}" class="img-fluid rounded mb-2" style="max-width:100%; height:auto;" />
+        {% else %}
+          <img src="{% static 'images/default.jpg' %}" class="img-fluid rounded mb-2" style="max-width:100%; height:auto;" />
+        {% endif %}
+
         {% if trip.gallery_images %}
         <div class="d-flex justify-content-center gap-2 mt-2">
           {% for img in trip.gallery_images %}
