@@ -1,41 +1,55 @@
 {% extends "base_generic.html" %}
 {% load static %}
 
+<style>
 .btn-purple {
-  background-color: #5f27cd;
+  background-color: #a259ff;
   color: white;
   border-radius: 1rem;
+  font-weight: bold;
 }
+.btn-purple:hover {
+  background-color: #843ecf;
+  color: white;
+}
+.card-title-section {
+  color: #e60073;
+  font-weight: bold;
+}
+.card-container {
+  border-radius: 1.5rem;
+  background-color: #fff0f8;
+}
+</style>
 
 {% block content %}
 <div class="container py-5">
-  <div class="card shadow p-4" style="border-radius: 1.5rem; background-color: #fff0f8;">
-    <h2 class="text-center mb-4 fw-bold" style="color: #e60073;">📝 行程預訂確認</h2>
+  <div class="card shadow p-4 card-container">
+    <h2 class="text-center mb-4 card-title-section">📝 Trip Booking Confirmation</h2>
 
     <div class="mb-3">
-      <h5 class="fw-bold">行程名稱：</h5>
+      <h5 class="fw-bold">Trip Name:</h5>
       <p>{{ schedule.trip.title }}</p>
     </div>
 
     <div class="mb-3">
-      <h5 class="fw-bold">出發日期：</h5>
+      <h5 class="fw-bold">Departure Date:</h5>
       <p>{{ schedule.date }}</p>
     </div>
 
     <div class="mb-3">
-      <h5 class="fw-bold">價格（TWD）：</h5>
+      <h5 class="fw-bold">Price (TWD):</h5>
       <p class="text-danger fw-bold">NTD {{ schedule.price_ntd }}</p>
     </div>
 
     <div class="mb-4">
-      <h5 class="fw-bold">剩餘名額：</h5>
+      <h5 class="fw-bold">Available Spots:</h5>
       {% if schedule.available_spots <= 5 %}
-        <p class="text-danger fw-bold">⚠ 僅剩 {{ schedule.available_spots }} 位！</p>
+        <p class="text-danger fw-bold">⚠ Only {{ schedule.available_spots }} left!</p>
       {% else %}
-        <p>{{ schedule.available_spots }} 位</p>
+        <p>{{ schedule.available_spots }} spots available</p>
       {% endif %}
     </div>
-
 
     <form method="post">
       {% csrf_token %}
@@ -54,13 +68,11 @@
         {% endfor %}
       </div>
 
-     
       <div class="text-center mt-4">
-        <button type="submit" class="btn btn-purple px-4 py-2" style="font-weight: bold;">✅ 送出預訂</button>
+        <button type="submit" class="btn btn-purple px-4 py-2">✅ Confirm Booking</button>
       </div>
     </form>
 
-  
     {% if messages %}
     <div class="mt-4 alert alert-success text-center">
       {% for message in messages %}
