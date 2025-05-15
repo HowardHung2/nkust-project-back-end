@@ -1,0 +1,33 @@
+<!-- templates/trip/tripschedule_list_by_user.html -->
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>我的行程訂單</h1>
+
+  {% if user_trip_orders %}
+    <ul>
+      {% for order in user_trip_orders %}
+        <li>
+          {{ order.trip_schedule.trip.title }} - 出發日期：{{ order.trip_schedule.date }} - 訂購名額：{{ order.spots_booked }}人 - 狀態：{{ order.get_payment_status_display }}
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% if is_paginated %}
+      <div>
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}">上一頁</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">下一頁</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  {% else %}
+    <p>目前沒有任何行程訂單。</p>
+  {% endif %}
+
+{% endblock %}

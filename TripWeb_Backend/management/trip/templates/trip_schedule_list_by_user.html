@@ -2,32 +2,109 @@
 
 {% extends "base_generic.html" %}
 
+{% block head_styles %}
+<style>
+  .order-section {
+    background-color: #fff0f8;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  .order-item {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+  }
+  .order-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  }
+  .order-img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 0.75rem;
+  }
+  .order-info {
+    flex: 1;
+  }
+  .order-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #6f42c1;
+  }
+  .order-meta {
+    font-size: 0.95rem;
+    color: #444;
+  }
+  .order-actions {
+    text-align: right;
+  }
+  .status-paid { color: #198754; font-weight: 600; }
+  .status-unpaid { color: #dc3545; font-weight: 600; }
+  .pagination {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .pagination a {
+    color: #7c4dff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-  <h1>我的行程訂單</h1>
+  <div class="container">
+    <h1 class="text-center my-4">📋 My Trip Orders</h1>
 
-  {% if user_trip_orders %}
-    <ul>
-      {% for order in user_trip_orders %}
-        <li>
-          {{ order.trip_schedule.trip.title }} - 出發日期：{{ order.trip_schedule.date }} - 訂購名額：{{ order.spots_booked }}人 - 狀態：{{ order.get_payment_status_display }}
-        </li>
-      {% endfor %}
-    </ul>
+    {% if user_trip_orders %}
+      <div class="order-section">
+        {% for order in user_trip_orders %}
+          <div class="order-item">
+            <img src="{{ order.trip_schedule.trip.thumbnail.url }}" class="order-img" alt="Trip Image">
+            <div class="order-info">
+              <div class="order-title">{{ order.trip_schedule.trip.title }}</div>
+              <div class="order-meta">
+                📅 Departure Date: {{ order.trip_schedule.date }}<br>
+                👥 Booked Spots: {{ order.spots_booked }} people<br>
+                💳 Status: <span class="{% if order.payment_status == 'paid' %}status-paid{% else %}status-unpaid{% endif %}">{{ order.get_payment_status_display }}</span>
+              </div>
+            </div>
+            <div class="order-actions">
+              {% if order.payment_status != 'paid' %}
+                <a href="#" class="btn btn-sm btn-warning mb-2">Pay Now</a><br>
+              {% endif %}
+              <a href="#" class="btn btn-sm btn-outline-danger">Cancel</a>
+            </div>
+          </div>
+        {% endfor %}
 
-    {% if is_paginated %}
-      <div>
-        {% if page_obj.has_previous %}
-          <a href="?page={{ page_obj.previous_page_number }}">上一頁</a>
-        {% endif %}
-        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-        {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}">下一頁</a>
+        {% if is_paginated %}
+          <div class="pagination">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}">← Previous</a>
+            {% endif %}
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}">Next →</a>
+            {% endif %}
+          </div>
         {% endif %}
       </div>
+    {% else %}
+      <div class="alert alert-info text-center mt-4" role="alert">
+        🚫 You don't have any trip orders yet.
+      </div>
     {% endif %}
-
-  {% else %}
-    <p>目前沒有任何行程訂單。</p>
-  {% endif %}
-
+  </div>
 {% endblock %}

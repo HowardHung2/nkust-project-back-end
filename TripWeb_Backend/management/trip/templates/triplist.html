@@ -1,28 +1,100 @@
 {% extends "base_generic.html" %}
 
 {% block head_styles %}
-  <!-- Styles for trip list page -->
+  <!-- Enhanced Styles for trip list page -->
   <style>
-    h1 { font-size: 2rem; font-weight: bold; margin-bottom: 1rem; }
-    ul.trip-list { list-style: none; padding: 0; }
-    ul.trip-list li { padding: 0.75rem 0; border-bottom: 1px solid #eee; }
-    ul.trip-list li a { text-decoration: none; color: #333; font-weight: 500; }
-    ul.trip-list li a:hover { color: #5f27cd; }
+    body {
+      background-color: #fff0f8;
+      font-family: 'Poppins', sans-serif;
+    }
+    .trip-section {
+      background-color: #ffffff;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin-top: 2rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #e60073;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    ul.trip-list {
+      list-style: none;
+      padding: 0;
+    }
+    ul.trip-list li {
+      padding: 1rem;
+      border: 1px solid #f0d7e7;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      background-color: #fff7fc;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    ul.trip-list li:hover {
+      transform: translateY(-3px);
+      background-color: #ffeaf5;
+    }
+    .trip-thumbnail {
+      width: 80px;
+      height: 60px;
+      border-radius: 0.75rem;
+      object-fit: cover;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    .trip-info {
+      flex-grow: 1;
+    }
+    ul.trip-list li a {
+      text-decoration: none;
+      color: #6f42c1;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    ul.trip-list li a:hover {
+      color: #d63384;
+    }
+    .trip-meta {
+      font-size: 0.95rem;
+      color: #666;
+    }
+    .badge {
+      background-color: #f8d3e1;
+      color: #c2185b;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      margin-left: 0.5rem;
+    }
   </style>
 {% endblock %}
 
 {% block content %}
-  <h1>Available Trips</h1>
-  {% if TripList %}
-    <ul class="trip-list">
-      {% for trip in TripList %}
-      <li>
-        <a href="{{ trip.get_absolute_url }}">{{ trip.title }}</a>
-        <span class="text-muted">({{ trip.location_country }}, {{ trip.location_city }})</span>
-      </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No trips available.</p>
-  {% endif %}
+  <div class="container">
+    <div class="trip-section">
+      <h1>🌸 Available Trips</h1>
+      {% if TripList %}
+        <ul class="trip-list">
+          {% for trip in TripList %}
+          <li>
+            <img src="{{ trip.thumbnail.url }}" alt="thumbnail" class="trip-thumbnail">
+            <div class="trip-info">
+              <a href="{{ trip.get_absolute_url }}">{{ trip.title }}</a>
+              <span class="badge">{{ trip.category|default:"Trip" }}</span><br>
+              <span class="trip-meta">📍 {{ trip.location_country }}, {{ trip.location_city }}</span>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-center text-muted">🚫 No trips available at the moment.</p>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
