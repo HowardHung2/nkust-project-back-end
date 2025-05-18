@@ -6,7 +6,6 @@
 {% load static %}
 {% load widget_tweaks %}
 
-
 <style>
   body {
     margin: 0;
@@ -24,11 +23,22 @@
     100% { background-position: 0% 50%; }
   }
 
+  @keyframes rotateIn {
+    0% {
+      opacity: 0;
+      transform: rotate(-360deg) scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+  }
+
   .login-card {
     border: none;
     border-radius: 1.5rem;
     box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
-    background-color: #ffffffee; /* 半透明白底 */
+    background-color: #ffffffee;
     backdrop-filter: blur(8px);
   }
 
@@ -67,10 +77,16 @@
   }
 
   .login-logo {
-    width: 60px;
+    width: 100px;
+    max-width: 140px;
     margin-bottom: 1rem;
+    animation: rotateIn 1s ease-out;
+    transition: transform 0.3s ease;
   }
 
+  .login-logo:hover {
+    transform: scale(1.05);
+  }
 </style>
 
 <div class="container d-flex align-items-center justify-content-center min-vh-100">
@@ -78,7 +94,7 @@
     <div class="card login-card p-4">
       <div class="card-body">
         <div class="text-center">
-          <img src="{% static 'images/login.png' %}" alt="Login Icon" class="login-logo">
+          <img src="{% static 'images/LOGO.png' %}" alt="Login Icon" class="login-logo">
           <h3 class="mb-4">Welcome Back</h3>
         </div>
 

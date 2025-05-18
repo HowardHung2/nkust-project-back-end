@@ -3,10 +3,79 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
+{% load static %}
+{% load widget_tweaks %}
+
+<style>
+  body {
+    background-color: #f8d3e1;
+    background-size: cover;
+    font-family: 'Poppins', sans-serif;
+    animation: twinkle 10s infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .signup-card {
+    background: rgba(255, 240, 248, 0.8);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 2rem;
+    backdrop-filter: blur(12px);
+    border: 2px solid #f8d3e1;
+    animation: floatCard 3s ease-in-out infinite;
+  }
+
+  @keyframes floatCard {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+  }
+
+  h3 {
+    font-weight: 700;
+    color: #d63384;
+    font-family: 'Sacramento', cursive;
+    font-size: 2.2rem;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #6c567b;
+  }
+
+  .form-control {
+    border-radius: 0.75rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid #ccc;
+  }
+
+  .btn-primary {
+    background-color: #d63384;
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+  }
+
+  .btn-primary:hover {
+    background-color: #b72c73;
+  }
+
+  .errorlist {
+    color: #e03131;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+
 <div class="container mt-5 pt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <div class="card">
+      <div class="signup-card">
         <div class="card-body">
           <h3 class="text-center">Sign Up</h3>
 
@@ -14,19 +83,23 @@
             {% csrf_token %}
             <div class="mb-3">
               <label for="username" class="form-label">Username</label>
-              {{ form.username }}
+              {{ form.username.errors }}
+              {{ form.username|add_class:"form-control" }}
             </div>
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
-              {{ form.email }}
+              {{ form.email.errors }}
+              {{ form.email|add_class:"form-control" }}
             </div>
             <div class="mb-3">
               <label for="password1" class="form-label">Password</label>
-              {{ form.password1 }}
+              {{ form.password1.errors }}
+              {{ form.password1|add_class:"form-control" }}
             </div>
             <div class="mb-3">
               <label for="password2" class="form-label">Confirm Password</label>
-              {{ form.password2 }}
+              {{ form.password2.errors }}
+              {{ form.password2|add_class:"form-control" }}
             </div>
             <div class="mb-3">
               <button type="submit" class="btn btn-primary w-100">Sign Up</button>
