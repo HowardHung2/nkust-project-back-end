@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "management.tokens",
     "rest_framework",
     'corsheaders',
+    'widget_tweaks',
 ]
 
 REST_FRAMEWORK = {
