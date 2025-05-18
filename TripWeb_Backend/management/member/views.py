@@ -7,6 +7,10 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import render
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from management.member.models import UserProfile
+from TripWeb_NFT_Management.createAccount import get_account_info
+
+
 
 def register(request):
     if request.method == 'POST':
@@ -15,9 +19,23 @@ def register(request):
             user = form.save()
             login(request, user)
             return redirect('trip')
+        else:
+            print("⚠️ 註冊表單驗證失敗！錯誤內容：", form.errors)  # <== 加上這行印出錯誤
     else:
         form = RegistrationForm()
     return render(request, 'register.html', {'form': form})
+
+
+# def register(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             login(request, user)
+#             return redirect('trip')
+#     else:
+#         form = RegistrationForm()
+#     return render(request, 'register.html', {'form': form})
 
 # def login(request):
 #     if request.user.is_authenticated:
@@ -40,7 +58,19 @@ def log_out(request):
 
 @login_required
 def profile(request):
-    return render(request, 'profile.html')
+    user = request.user
+    try:
+        profile = user.profile  # 透過 OneToOne 連結取得 UserProfile
+        xrpl_data = get_account_info(profile.xrpl_address)  # 查詢 XRPL 帳戶資訊
+    except Exception as e:
+        xrpl_data = None
+        print(f"⚠️ XRPL 資訊獲取失敗：{e}")
+
+    return render(request, 'profile.html', {
+        'user': user,
+        'profile': profile,
+        'xrpl_data': xrpl_data,
+    })
 
 
 # from rest_framework.decorators import api_view, permission_classes
