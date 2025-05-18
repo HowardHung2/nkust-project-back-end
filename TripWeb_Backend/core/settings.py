@@ -39,11 +39,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "management.order",
     "management.trip",
-    "management.member",
+    'management.member.apps.MemberConfig',
     "management.tokens",
     "rest_framework",
     'corsheaders',
     'widget_tweaks',
+    'management',
 ]
 
 REST_FRAMEWORK = {
@@ -140,3 +141,4 @@ LOGIN_REDIRECT_URL = 'trip'
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = BASE_DIR / 'images'
+AUTH_PROFILE_MODULE = 'management.member.UserProfile'

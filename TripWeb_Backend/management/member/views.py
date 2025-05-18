@@ -6,6 +6,7 @@ from django.views.generic import TemplateView, CreateView
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == 'POST':
@@ -18,17 +19,17 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'register.html', {'form': form})
 
-def login(request):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect('/trip')
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    user = auth.authenticate(username=username, password=password)
-    if user is not None and user.is_active:
-        auth.login(request, user)
-        return HttpResponseRedirect("/trip")
-    else:
-        return render(request, 'login.html', locals())
+# def login(request):
+#     if request.user.is_authenticated:
+#         return HttpResponseRedirect('/trip')
+#     username = request.POST.get('username')
+#     password = request.POST.get('password')
+#     user = auth.authenticate(username=username, password=password)
+#     if user is not None and user.is_active:
+#         auth.login(request, user)
+#         return HttpResponseRedirect("/trip")
+#     else:
+#         return render(request, 'login.html', locals())
     
 def main_page(request):
     return render(request, 'main_page.html')
@@ -36,6 +37,11 @@ def main_page(request):
 def log_out(request):
     auth.logout(request)
     return HttpResponseRedirect('/main_page')
+
+@login_required
+def profile(request):
+    return render(request, 'profile.html')
+
 
 # from rest_framework.decorators import api_view, permission_classes
 # from rest_framework.permissions import IsAuthenticated
