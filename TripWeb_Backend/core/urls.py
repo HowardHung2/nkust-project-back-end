@@ -30,3 +30,6 @@ urlpatterns = [
 
 # 加上 static files 設定（僅限 DEBUG 模式）
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
