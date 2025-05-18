@@ -22,7 +22,7 @@ class TripScheduleByUserListView(LoginRequiredMixin, generic.ListView):
             .order_by('-booking_date')
         )
 
-@permission_required('management.trip.can_purchase_trip')
+# @permission_required('management.trip.can_purchase_trip')
 def purchase_trip(request, schedule_id):
     schedule = get_object_or_404(TripSchedule, pk=schedule_id)
 
