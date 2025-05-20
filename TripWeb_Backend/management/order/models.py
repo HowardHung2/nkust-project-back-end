@@ -38,6 +38,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.shortcuts import reverse
+from django.contrib.auth.models import User
 
 from management.trip.models import TripSchedule
 from management.tokens.models import TripToken
@@ -86,52 +87,57 @@ class TripOrder(models.Model):
     def __str__(self):
         return f"{self.user.username} → {self.trip_schedule} ({self.spots_booked} seats)"
 
-    def save(self, *args, **kwargs):
-        # Determine if this is a brand-new order
-        is_new = self._state.adding
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     # Determine if this is a brand-new order
+    #     is_new = self._state.adding
+    #     super().save(*args, **kwargs)
 
-        if is_new:
-            # 1) Build a URI pointing to your token metadata (JSON on your server or IPFS)
-            metadata_uri = self._build_token_metadata_uri()
+    #     if is_new:
+    #         # 1) Build a URI pointing to your token metadata (JSON on your server or IPFS)
+    #         metadata_uri = self._build_token_metadata_uri()
 
-            # 2) Mint the NFT on XRPL
-            #    flags, transfer_fee, taxon are XRPL-specific mint parameters
-            mint_result = mint_token(
-                seed=self.user.profile.xrpl_seed,
-                uri=metadata_uri,
-                flags=8,
-                transfer_fee=0,
-                taxon=0,
-            )
+    #         minter_user = User.objects.get(username="admin")
+    #         minter_seed = minter_user.profile.xrpl_seed 
 
-            # 3) If mint succeeded, record a new TripToken
-            tx_hash = (
-                mint_result.get("hash")
-                if isinstance(mint_result, dict)
-                else None
-            )
-            if tx_hash:
-                # next token_index is count+1
-                next_index = (
-                    TripToken.objects
-                    .filter(trip_schedule=self.trip_schedule)
-                    .count()
-                    + 1
-                )
-                TripToken.objects.create(
-                    trip_schedule=self.trip_schedule,
-                    token_index=next_index,
-                    owner=self.user,
-                    order=self,
-                    token_uri=metadata_uri,
-                    mint_tx_hash=tx_hash,
-                    status="ISSUED",
-                    issued_at=timezone.now(),
-                )
-            else:
-                # You might want to log or retry on failure
-                print("⚠️ NFT mint failed:", mint_result)
+    #         # 2) Mint the NFT on XRPL
+    #         #    flags, transfer_fee, taxon are XRPL-specific mint parameters
+    #         mint_result = mint_token(
+    #             seed=minter_seed,
+    #             # seed=self.user.profile.xrpl_seed,
+    #             uri=metadata_uri,
+    #             flags=8,
+    #             transfer_fee=0,
+    #             taxon=0,
+    #         )
+
+    #         # 3) If mint succeeded, record a new TripToken
+    #         tx_hash = (
+    #             mint_result.get("hash")
+    #             if isinstance(mint_result, dict)
+    #             else None
+    #         )
+
+    #         if tx_hash:
+    #             # next token_index is count+1
+    #             next_index = (
+    #                 TripToken.objects
+    #                 .filter(trip_schedule=self.trip_schedule)
+    #                 .count()
+    #                 + 1
+    #             )
+    #             TripToken.objects.create(
+    #                 trip_schedule=self.trip_schedule,
+    #                 token_index=next_index,
+    #                 owner=self.user,
+    #                 order=self,
+    #                 token_uri=metadata_uri,
+    #                 mint_tx_hash=tx_hash,
+    #                 status="ISSUED",
+    #                 issued_at=timezone.now(),
+    #             )
+    #         else:
+    #             # You might want to log or retry on failure
+    #             print("⚠️ NFT mint failed:", mint_result)
 
     def _build_token_metadata_uri(self):
         """

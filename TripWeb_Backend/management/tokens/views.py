@@ -24,7 +24,7 @@ from django.shortcuts import render
 
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from management.order.models import TripOrder  # 確保 import 對
+from management.order.models import TripOrder  
 
 def token_metadata_json(request, order_id):
     order = get_object_or_404(TripOrder, id=order_id)

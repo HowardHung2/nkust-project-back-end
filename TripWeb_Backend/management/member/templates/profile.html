@@ -49,17 +49,51 @@
     <p><strong>Seed:</strong> <code>{{ profile.xrpl_seed }}</code></p>
 
     {% if xrpl_data %}
-      <p><strong>Balance:</strong> {{ xrpl_data.Balance|floatformat:-6 }} XRP</p>
-      <p><strong>Sequence:</strong> {{ xrpl_data.Sequence }}</p>
+    <p><strong>Balance:</strong> {{ xrpl_data.Balance|floatformat:-6 }} XRP</p>
+    <p><strong>Sequence:</strong> {{ xrpl_data.Sequence }}</p>
     {% else %}
-      <p class="text-danger">❌ Failed to load XRPL info.</p>
+    <p class="text-danger">❌ Failed to load XRPL info.</p>
     {% endif %}
 
     <hr>
 
     <div class="profile-section-title">📦 XRPL NFTs on Chain</div>
 
-    {% if xrpl_nfts %}
+
+    <h4 class="mt-4">📦 XRPL NFTs on Chain</h4>
+    {% for nft in nft_data %}
+    <div class="card p-3 mb-3">
+      <p><strong>ID:</strong> {{ nft.NFTokenID }}</p>
+      <p><strong>URI:</strong> {{ nft.decoded_uri }}</p>
+      <p>🔖 Flags: {{ nft.Flags }} | 🧬 Taxon: {{ nft.NFTokenTaxon }}</p>
+
+      {% if nft.order %}
+      <p>🧾 對應訂單：{{ nft.order }}</p>
+      {% else %}
+      <p class="text-danger">❌ 無對應訂單</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+<!-- 
+    <h4 class="mt-4">📦 XRPL NFTs on Chain</h4>
+    {% for nft in nft_data %}
+    <div class="card p-3 mb-3">
+      <p><strong>ID:</strong> {{ nft.NFTokenID }}</p>
+      <p><strong>URI:</strong> {{ nft.decoded_uri }}</p>
+      <p>🔖 Flags: {{ nft.Flags }} | 🧬 Taxon: {{ nft.NFTokenTaxon }}</p>
+
+      {% if nft.order %}
+      <p>🧾 對應訂單：{{ nft.order }}</p>
+      {% else %}
+      <p class="text-danger">❌ 無對應訂單</p>
+      {% endif %}
+    </div>
+    {% endfor %} -->
+
+
+
+
+    <!-- {% if xrpl_nfts %}
       <ul class="list-group nft-list">
         {% for nft in xrpl_nfts %}
           <li class="list-group-item">
@@ -72,6 +106,6 @@
     {% else %}
       <p class="text-muted">No on-chain NFTs found for this account.</p>
     {% endif %}
+  </div> -->
   </div>
-</div>
-{% endblock %}
+  {% endblock %}
