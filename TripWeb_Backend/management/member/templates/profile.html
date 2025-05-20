@@ -1,41 +1,77 @@
 {% extends "base_generic.html" %}
 {% block content %}
-<div class="container py-5">
-  <h2 class="mb-4">🧑‍💻 User Profile</h2>
+<style>
+  .profile-card {
+    background-color: #fff5fb;
+    border-radius: 1.5rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
 
-  <div class="card p-4">
-    <h5 class="mb-2">Username: {{ user.username }}</h5>
-    <p>Email: {{ user.email }}</p>
+  .profile-section-title {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: #e60073;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .nft-list li {
+    background-color: #fff;
+    border: 1px solid #f3c6dc;
+    border-radius: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .text-danger {
+    color: #e63946;
+    font-weight: bold;
+  }
+
+  code {
+    background-color: #ffeaf5;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.4rem;
+  }
+</style>
+
+<div class="container py-5">
+  <h2 class="mb-4 fw-bold" style="color:#e60073;">🧑‍💻 User Profile</h2>
+
+  <div class="profile-card">
+    <h5 class="mb-3">👤 <strong>Username:</strong> {{ user.username }}</h5>
+    <p>📧 <strong>Email:</strong> {{ user.email }}</p>
 
     <hr>
-    <h5>XRPL Wallet Info</h5>
-    <p><strong>Address:</strong> {{ profile.xrpl_address }}</p>
+
+    <div class="profile-section-title">💰 XRPL Wallet Info</div>
+    <p><strong>Address:</strong> <code>{{ profile.xrpl_address }}</code></p>
     <p><strong>Seed:</strong> <code>{{ profile.xrpl_seed }}</code></p>
 
     {% if xrpl_data %}
-      <p><strong>XRP Balance:</strong> {{ xrpl_data.Balance|floatformat:-6 }} XRP</p>
-      <p><strong>Account Sequence:</strong> {{ xrpl_data.Sequence }}</p>
+      <p><strong>Balance:</strong> {{ xrpl_data.Balance|floatformat:-6 }} XRP</p>
+      <p><strong>Sequence:</strong> {{ xrpl_data.Sequence }}</p>
     {% else %}
       <p class="text-danger">❌ Failed to load XRPL info.</p>
     {% endif %}
 
-        <hr>
-    <h5 class="mt-4">📦 XRPL NFTs on Chain</h5>
+    <hr>
+
+    <div class="profile-section-title">📦 XRPL NFTs on Chain</div>
 
     {% if xrpl_nfts %}
-      <ul class="list-group">
+      <ul class="list-group nft-list">
         {% for nft in xrpl_nfts %}
           <li class="list-group-item">
-            ID: <code>{{ nft.NFTokenID }}</code><br>
-            URI: {{ nft.URI|default:"-"|safe }}<br>
-            Flags: {{ nft.Flags }} | Taxon: {{ nft.NFTokenTaxon }}
+            🆔 <strong>ID:</strong> <code>{{ nft.NFTokenID }}</code><br>
+            🌐 <strong>URI:</strong> {{ nft.URI|default:"-"|safe }}<br>
+            🔖 <strong>Flags:</strong> {{ nft.Flags }} | 🧬 <strong>Taxon:</strong> {{ nft.NFTokenTaxon }}
           </li>
         {% endfor %}
       </ul>
     {% else %}
       <p class="text-muted">No on-chain NFTs found for this account.</p>
     {% endif %}
-
   </div>
 </div>
 {% endblock %}

@@ -224,7 +224,7 @@
         <a href="{% url 'trip_detail' schedule.trip.id %}" class="text-decoration-none text-dark">
           <div class="card shadow h-100">
             <!-- below need to fix -->
-            <img src=" schedule.trip.thumbnail.url " class="card-img-top" alt="{{ schedule.trip.title }}">
+            <img src="{{ schedule.trip.thumbnail.url }}" class="card-img-top" alt="{{ schedule.trip.title }}">
             <div class="card-body text-center">
               <h5 class="card-title">{{ schedule.trip.title }}</h5>
               <p class="mb-1">▼ {{ schedule.trip.promotions }}</p>

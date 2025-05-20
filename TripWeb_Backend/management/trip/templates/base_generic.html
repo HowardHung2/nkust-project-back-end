@@ -68,6 +68,7 @@
           {% if user.is_authenticated %}
           <li class="nav-item mb-2"><span class="text-muted">User: {{ user.get_username }}</span></li>
           <li class="nav-item mb-2"><a class="nav-link text-dark" href="{% url 'my_order' %}">My Orders</a></li>
+          <li class="nav-item mb-2"><a class="nav-link text-dark" href="{% url 'users-profile' %}">My profile</a></li>
           <li class="nav-item">
             <form method="post" action="{% url 'logout' %}">{% csrf_token %}
               <button class="btn btn-link nav-link text-danger p-0">Logout</button>
