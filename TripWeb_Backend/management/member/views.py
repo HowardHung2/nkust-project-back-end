@@ -57,27 +57,75 @@ def log_out(request):
     auth.logout(request)
     return HttpResponseRedirect('/main_page')
 
+# @login_required
+# def profile(request):
+#     user = request.user
+#     try:
+#         profile = user.profile
+#         xrpl_data = get_account_info(profile.xrpl_address)
+#         xrpl_nfts = get_tokens(profile.xrpl_address).get("account_nfts", [])  # ✅ 取得 NFT 清單
+#     except Exception as e:
+#         xrpl_data = None
+#         xrpl_nfts = []
+#         print(f"⚠️ XRPL 資訊獲取失敗：{e}")
+
+#     tokens = TripToken.objects.filter(owner=user).select_related("trip_schedule", "trip_schedule__trip")
+
+#     return render(request, "profile.html", {
+#         "user": user,
+#         "profile": profile,
+#         "xrpl_data": xrpl_data,
+#         "xrpl_nfts": xrpl_nfts,  # ✅ 傳入模板
+#         "tokens": tokens,
+#     })
+
 @login_required
 def profile(request):
     user = request.user
     try:
         profile = user.profile
         xrpl_data = get_account_info(profile.xrpl_address)
-        xrpl_nfts = get_tokens(profile.xrpl_address).get("account_nfts", [])  # ✅ 取得 NFT 清單
+
+        # ✅ 加上手動 HEX 解碼器
+        def hex_to_str(hex_str):
+            try:
+                return bytes.fromhex(hex_str).decode("utf-8")
+            except Exception:
+                return "Invalid HEX"
+
+        from uuid import UUID
+        from management.order.models import TripOrder
+        import re
+
+        nft_data = get_tokens(profile.xrpl_address)["account_nfts"]
+        print(nft_data)
+        for nft in nft_data:
+            try:
+                decoded_uri = hex_to_str(nft["URI"])
+                nft["decoded_uri"] = decoded_uri
+
+                match = re.search(r'/metadata/([0-9a-f-]+)/?$', decoded_uri)
+                if match:
+                    order_id = UUID(match.group(1))
+                    nft["order"] = TripOrder.objects.get(id=order_id)
+                else:
+                    nft["order"] = None
+            except Exception as e:
+                nft["decoded_uri"] = "❌ Invalid URI"
+                nft["order"] = None
+
     except Exception as e:
         xrpl_data = None
-        xrpl_nfts = []
+        nft_data = []
         print(f"⚠️ XRPL 資訊獲取失敗：{e}")
 
-    tokens = TripToken.objects.filter(owner=user).select_related("trip_schedule", "trip_schedule__trip")
-
-    return render(request, "profile.html", {
-        "user": user,
-        "profile": profile,
-        "xrpl_data": xrpl_data,
-        "xrpl_nfts": xrpl_nfts,  # ✅ 傳入模板
-        "tokens": tokens,
+    return render(request, 'profile.html', {
+        'user': user,
+        'profile': profile,
+        'xrpl_data': xrpl_data,
+        'nft_data': nft_data,
     })
+
 
 
 # from rest_framework.decorators import api_view, permission_classes

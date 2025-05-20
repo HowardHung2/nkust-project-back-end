@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib import messages
 from django.utils import timezone  
+from django.contrib.auth.models import User
 
 import sys
 import os
@@ -51,11 +52,13 @@ def purchase_trip(request, schedule_id):
                 f"/api/tokens/metadata/{order.id}/"
             )
 
+            minter_user = User.objects.get(username="admin")
+            minter_seed = minter_user.profile.xrpl_seed 
             # 3) mint on XRPL
-            print("⚠️ mint_token: using seed =", request.user.profile.xrpl_seed)
-            print("⚠️ mint_token: metadata_uri =", metadata_uri)
+            print("⚠️ mint_token in view.py: using seed =", request.user.profile.xrpl_seed)
+            print("⚠️ mint_token in view.py: metadata_uri =", metadata_uri)
             result = mint_token(
-                seed='sEdVg2RhrZwhiJfjY6PhVbB5ZwVYrbW',
+                seed=minter_seed,
                 uri=metadata_uri,
                 flags=8,          # as per your protocol
                 transfer_fee=0,
@@ -74,7 +77,8 @@ def purchase_trip(request, schedule_id):
                 TripToken.objects.create(
                     trip_schedule=schedule,
                     token_index=next_index,
-                    owner=request.user,
+                    owner=minter_user,
+                    # owner=request.user,
                     order=order,
                     token_uri=metadata_uri,
                     mint_tx_hash=tx_hash,
