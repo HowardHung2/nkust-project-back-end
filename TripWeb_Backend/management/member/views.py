@@ -9,7 +9,8 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from management.member.models import UserProfile
 from TripWeb_NFT_Management.createAccount import get_account_info
-
+from TripWeb_NFT_Management.mintAndBurnNFT import get_tokens
+from management.tokens.models import TripToken
 
 
 def register(request):
@@ -60,16 +61,22 @@ def log_out(request):
 def profile(request):
     user = request.user
     try:
-        profile = user.profile  # 透過 OneToOne 連結取得 UserProfile
-        xrpl_data = get_account_info(profile.xrpl_address)  # 查詢 XRPL 帳戶資訊
+        profile = user.profile
+        xrpl_data = get_account_info(profile.xrpl_address)
+        xrpl_nfts = get_tokens(profile.xrpl_address).get("account_nfts", [])  # ✅ 取得 NFT 清單
     except Exception as e:
         xrpl_data = None
+        xrpl_nfts = []
         print(f"⚠️ XRPL 資訊獲取失敗：{e}")
 
-    return render(request, 'profile.html', {
-        'user': user,
-        'profile': profile,
-        'xrpl_data': xrpl_data,
+    tokens = TripToken.objects.filter(owner=user).select_related("trip_schedule", "trip_schedule__trip")
+
+    return render(request, "profile.html", {
+        "user": user,
+        "profile": profile,
+        "xrpl_data": xrpl_data,
+        "xrpl_nfts": xrpl_nfts,  # ✅ 傳入模板
+        "tokens": tokens,
     })
 
 

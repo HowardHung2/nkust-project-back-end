@@ -26,10 +26,15 @@ urlpatterns = [
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # # 3) 登出（注销 refresh，选用）
     # path('api/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
+
+    path('token/', include('management.tokens.urls')),  # 加入這一行
+    path('', include('management.tokens.urls')),  # 加上這行
 ]
 
 # 加上 static files 設定（僅限 DEBUG 模式）
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
