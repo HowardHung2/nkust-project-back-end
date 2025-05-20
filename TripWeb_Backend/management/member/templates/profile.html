@@ -18,6 +18,24 @@
     {% else %}
       <p class="text-danger">❌ Failed to load XRPL info.</p>
     {% endif %}
+
+        <hr>
+    <h5 class="mt-4">📦 XRPL NFTs on Chain</h5>
+
+    {% if xrpl_nfts %}
+      <ul class="list-group">
+        {% for nft in xrpl_nfts %}
+          <li class="list-group-item">
+            ID: <code>{{ nft.NFTokenID }}</code><br>
+            URI: {{ nft.URI|default:"-"|safe }}<br>
+            Flags: {{ nft.Flags }} | Taxon: {{ nft.NFTokenTaxon }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">No on-chain NFTs found for this account.</p>
+    {% endif %}
+
   </div>
 </div>
 {% endblock %}
