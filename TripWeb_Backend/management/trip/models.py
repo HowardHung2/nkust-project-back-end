@@ -74,9 +74,9 @@ class TripSchedule(models.Model):
     status = models.CharField(
         max_length=10,
         choices=[
-            ("OPEN", "開放預訂"),
-            ("CLOSED", "已關閉預訂"),
-            ("FULL", "已滿額"),
+            ("OPEN", "Open for Reservation"),
+            ("CLOSED", "Reservation Closed"),
+            ("FULL", "Sold Out"),
         ],
         default="OPEN",
         help_text="日期時段的狀態，例：開放預訂、已關閉預訂、已滿額",

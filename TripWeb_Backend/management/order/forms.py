@@ -6,7 +6,7 @@ class PurchaseTripForm(forms.ModelForm):
         model = TripOrder
         fields = ['spots_booked']
         labels = {
-            'spots_booked': '預訂人數',
+            'spots_booked': 'Number of People Booked',
         }
         widgets = {
             'spots_booked': forms.NumberInput(attrs={'min': 1, 'max': 10}),
@@ -15,5 +15,5 @@ class PurchaseTripForm(forms.ModelForm):
     def clean_spots_booked(self):
         spots = self.cleaned_data['spots_booked']
         if spots < 1:
-            raise forms.ValidationError("預訂人數必須至少為 1")
+            raise forms.ValidationError("The number of people booked must be at least 1.")
         return spots
